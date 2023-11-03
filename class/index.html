@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kế thừa trong javascript</title>
+</head>
+
+<body>
+    <script>
+        class A {
+            constructor(x1) {
+                this.x = x1;
+            }
+            f1() {
+                console.log(this.x);
+            }
+        }
+        var teoem = new A(100)
+        console.log(teoem);
+        teoem.f1();
+    </script>
+</body>
+
+</html>
