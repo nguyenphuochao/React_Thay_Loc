@@ -4,29 +4,22 @@ const initialState = [];
 const todoListReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'add':
-            var newState = [...state];
-            newState.push(action.payload); // hàm thêm phần tử
-            return newState;
-        case 'remove':
-            if (typeof action.payload == 'number') {
-                var newState = [...state];
-                const key = action.payload;
-                const index = key - 1; //danh sách tính từ 0
-                newState.splice(index, 1); // hàm xóa 1 phần tử
-                return newState;
-            } else {
-                var newState = [];
-                const keyList = action.payload;
-                for (let i = 0; i <= state.length - 1; i++) {
-                    const key = i + 1;
-                    if (!keyList.includes(key)) {
-                        const task = state[i];
-                        newState.push(task);
-                    }
-                }
-                return newState;
+            var newState = [];
+            for (const el of state) {
+                newState.push({ ...el });
             }
 
+            newState.push({ ...action.payload }); // hàm thêm phần tử
+            return newState;
+        case 'remove':
+            var newState = [];
+            for (const el of state) {
+                const removeKey = Number(action.payload);
+                if (el.key != removeKey) {
+                    newState.push({ ...el });
+                }
+            }
+            return newState;
         default:
             return state;
     }
@@ -39,7 +32,8 @@ store.subscribe(() => {
     let key = 1;
     for (const todo of todoList) {
         const liTag = document.createElement('li');
-        liTag.textContent = todo;
+        liTag.textContent = todo.name;
+        liTag.setAttribute('key', todo.key);
         const btnEl = document.createElement('button');
         btnEl.textContent = 'Xóa';
         btnEl.setAttribute('type', 'button');
@@ -58,7 +52,7 @@ store.subscribe(() => {
     qtyEl.innerHTML = todoList.length;
 });
 const deleteTodo = (event) => {
-    const key = event.target.getAttribute('key');
+    const key = event.target.parentElement.getAttribute('key');
     store.dispatch({ type: 'remove', payload: key });
 
 }
@@ -67,7 +61,8 @@ formTag.onsubmit = function (e) {
     e.preventDefault();
     const inputTag = formTag.querySelector('input');
     const taskName = inputTag.value;
-    store.dispatch({ type: 'add', payload: taskName });
+    const keyName = Math.floor(Math.random() * 10000);
+    store.dispatch({ type: 'add', payload: { key: keyName, name: taskName } });
     this.reset();
 }
 const chkAllEl = document.querySelector('.chk-all');
@@ -82,12 +77,9 @@ const deleteTodoListEl = document.querySelector('.delete-todolist');
 deleteTodoListEl.onclick = function () {
     const olEl = document.querySelector('#view-todolist');
     const checkedEls = olEl.querySelectorAll('input[type=checkbox]:checked');
-    const keys = [];
     for (const checkedEl of checkedEls) {
-        let key = checkedEl.getAttribute('key');
-        keys.push(Number(key));
-    }
-    if (keys.length > 0) {
-        store.dispatch({ type: 'remove', payload: keys });
+        const liEl = checkedEl.parentElement;
+        const removeKey = liEl.getAttribute('key');
+        store.dispatch({ type: 'remove', payload: removeKey });
     }
 }

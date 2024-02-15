@@ -1,3 +1,4 @@
+// hàm tạo reducer store
 const { createStore } = window.Redux;
 // action là object vd: {type: 'increment'}
 const initialState = { value: 0 };
