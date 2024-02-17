@@ -4,18 +4,22 @@ import Student from './Student';
 class StudentList extends Component {
     constructor(props) {
         super(props);
-        this.state = { studentList: [] };
+        this.state = { studentList: [], isLoaded: false, error: null };
     }
     componentDidMount() {
         fetch('https://65d036e5ab7beba3d5e2df7e.mockapi.io/api/v1/students')
             .then(result => result.json())
-            .then(result => this.setState({ studentList: result }))
-            .catch(error => console.log(error));
+            .then(result => this.setState({ studentList: result, isLoaded: true }))
+            .catch(error => this.setState({ error: error, isLoaded: true }));
     }
 
     render() {
-        const { studentList } = this.state;
-        console.log(studentList);
+        const { studentList, isLoaded, error } = this.state;
+        if (!isLoaded) {
+            return <div className="text-success">Loading...</div>
+        } else if (error) {
+            return <div className="text-danger">{error}</div>
+        }
         return (
             <>
                 <table className="table table-hover">
@@ -31,13 +35,15 @@ class StudentList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <Student />
-                        <Student />
-                        <Student />
+                        {studentList.map((objectStudent, index) => {
+                            return (
+                                <Student key={index} data={objectStudent} order={index + 1} />
+                            )
+                        })}
                     </tbody>
                 </table>
                 <div>
-                    <span>Số lượng: 3</span>
+                    <span>Số lượng: {studentList.length}</span>
                 </div>
             </>
         );

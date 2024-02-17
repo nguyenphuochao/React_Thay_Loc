@@ -1,1 +1,3 @@
 - Sử dụng mockAPI để lấy dữ liệu mẫu
+- Cài validation: yarn add formik yup
+- Tham khảo nguồn tài liệu formik docs: https://formik.org/docs/tutorial
