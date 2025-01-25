@@ -1,12 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Car1 from './Car1';
+
+// import Car1 from './Car1';
 import Car2 from './Car2'
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
